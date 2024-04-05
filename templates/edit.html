@@ -1,0 +1,87 @@
+{% include 'home_wilogin.html' %} 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .navbar .home {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .navbar a:hover {
+            background-color: white;
+            color: #333;
+        }
+
+        .navbar .home:hover {
+            background-color: #333;
+            color: wheat;
+        }
+    </style>
+</head>
+
+<body>
+    <!--<div class="navbar mb-4">
+        <h1><a class="home" href="/">Spencer</a></h1>
+        <div>
+            <a href="{% url 'list' %}">View all</a>
+            <a href="{% url 'home' %}">Home</a>
+        </div>
+    </div>-->
+    {% for item in items %}
+    <form action="{% url 'edit' item.id %}" method="POST" style="width: 70%; margin:auto; margin-top:20px">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleInputEmail1">Item Type</label>
+            <input type="text" class="form-control" id="itype" name="itype" aria-describedby="emailHelp" value="{{item.i_type}}">
+            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Vehicle Type</label>
+            <input type="text" class="form-control" id="vtype" name="vtype" aria-describedby="emailHelp" value="{{item.v_type}}">
+            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Manufacturer</label>
+            <input type="text" class="form-control" id="manufacturer" name="manufacturer" aria-describedby="emailHelp" value="{{item.manufacturer}}">
+            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" aria-describedby="emailHelp" value="{{item.quantity}}">
+            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Price</label>
+            <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp" value="{{item.price}}">
+            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Update</button>
+        <!-- <button onclick="{% url 'list' %}" class="btn btn-primary">View all</button> -->
+    </form>
+    {% endfor %}
+</body>
+
+</html>

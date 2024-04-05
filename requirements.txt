@@ -1,0 +1,6 @@
+download the code in a folder
+install python3 
+install django using "pip install django"
+navigate to MPSS directory which has manage.py file 
+type command "python manage.py runserver"
+a terminal generate link will be given press ctrl+click to open it
