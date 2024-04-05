@@ -58,16 +58,20 @@ def generate_line_plot(sales):
     # Create a dictionary to store data for each item
     item_data = {}
     
-    # Process data for each item
+    # Process data for each item type
     for sale in sales:
         if sale.i_type not in item_data:
-            item_data[sale.i_type] = {'dates': [], 'quantities': []}
-        item_data[sale.i_type]['dates'].append(sale._date)
-        item_data[sale.i_type]['quantities'].append(sale.items_sold)
+            item_data[sale.i_type] = {'dates': [], 'total_quantity': []}
+        if sale._date not in item_data[sale.i_type]['dates']:
+            item_data[sale.i_type]['dates'].append(sale._date)
+            item_data[sale.i_type]['total_quantity'].append(sale.items_sold)
+        else:
+            index = item_data[sale.i_type]['dates'].index(sale._date)
+            item_data[sale.i_type]['total_quantity'][index] += sale.items_sold
     
     # Plot each item's data
     for item, data in item_data.items():
-        plt.plot(data['dates'], data['quantities'], marker='o', linestyle='-', label=item)
+        plt.plot(data['dates'], data['total_quantity'], marker='o', linestyle='-', label=item)
     
     plt.title('Sales over Time by Item')
     plt.xlabel('Date')
@@ -85,11 +89,17 @@ def generate_line_plot(sales):
     return image_base64
 
 def generate_bar_plot(sales):
-    # Process the data to get x and y values for the plot
-    x_values = [sale.manufacturer for sale in sales]
-    y_values = [sale.items_sold for sale in sales]
+    # Group sales data by manufacturer and sum quantities sold for each manufacturer
+    manufacturer_sales = {}
+    for sale in sales:
+        if sale.manufacturer in manufacturer_sales:
+            manufacturer_sales[sale.manufacturer] += sale.items_sold
+        else:
+            manufacturer_sales[sale.manufacturer] = sale.items_sold
 
-    # Create the plot using Matplotlib
+    # Extract x and y values for the plot
+    x_values = list(manufacturer_sales.keys())
+    y_values = list(manufacturer_sales.values())
     plt.figure(figsize=(10, 6))
     plt.bar(x_values, y_values)
     plt.title('Sales by Manufacturer')
