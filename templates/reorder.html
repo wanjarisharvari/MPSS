@@ -39,6 +39,11 @@
             background-color: #333;
             color: wheat;
         }
+
+        .btn-container {
+            text-align: center;
+          }
+          
     </style>
 </head>
 
@@ -74,6 +79,13 @@
             {% endfor %}
         </tbody>
     </table>
+    <br>
+    <form method = "post">
+    {% csrf_token %}
+    <div class="btn-container">
+    <button type="submit" class="btn btn-primary" style="width: 10%;">Report Sale</button>
+    </div>
+    </form>
 </body>
 
 </html>

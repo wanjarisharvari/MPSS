@@ -130,8 +130,8 @@ def sale(request):
             q = item.quantity
             item.save()
             cost = quantity*item.price
-            _date = date.today()
-            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , _date = _date)
+            sale_date = date.today()
+            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , sale_date = sale_date)
             sale.save()
 
             return redirect('sale')
@@ -150,12 +150,23 @@ def reorder(request):
     items = Item.objects.all()
     insufficients = []
     calculate_items_sold_last_7_days()
+   # if request.method == 'POST':
+    #flag = 0  
     
+
     for item in items:
         if(item.quantity<item.threshold):
-            insufficients.append(item)
+            flag=1
+            insufficients.append(item) 
+
+    #if request.method == 'POST' and flag ==1 :
+    #   for item in items:
+    #    item.quantity = item.threshold+10
+    #    item.save()
 
     return render(request, 'reorder.html', {'insufficients':insufficients})
+
+
 
 # views.py
 

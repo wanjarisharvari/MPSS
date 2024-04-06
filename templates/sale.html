@@ -40,6 +40,10 @@
             background-color: #333;
             color: wheat;
         }
+
+        .btn-container {
+            text-align: center;
+          }
     </style>
 </head>
 
@@ -81,8 +85,10 @@
             <input type="number" class="form-control" id="price" name="price" aria-describedby="emailHelp" placeholder="Enter Price">
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div> -->
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Report Sale</button>
+        <div class="btn-container">
+        <button type="submit" class="btn btn-primary" style="width: 10%;">Report Sale</button>
         <h2 style="color: red;text-align:center">{{msg}}</h2>
+        </div>
         <!-- <button onclick="{% url 'list' %}" class="btn btn-primary">View all</button> -->
     </form>
 </body>

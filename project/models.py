@@ -30,7 +30,7 @@ class Sale(models.Model):
     quantity = models.IntegerField(null=True, blank=True)
     items_sold = models.IntegerField(default = 0)
     cost = models.IntegerField(null=True, blank=True)
-    _date = models.DateField(default=datetime.date.today)
+    sale_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
         return (self.i_type + '-' + self.manufacturer + '-' + self.v_type + '-' + str(self.quantity))

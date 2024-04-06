@@ -12,7 +12,7 @@ def calculate_items_sold_last_7_days():
     seven_days_ago = datetime.now() - timedelta(days=7)
 
     # Query the sales data for the last 7 days
-    sales_last_week = Sale.objects.filter(_date__gte=seven_days_ago)
+    sales_last_week = Sale.objects.filter(sale_date__gte=seven_days_ago)
 
     # Initialize a dictionary to store total items sold for each item type
     
@@ -62,11 +62,11 @@ def generate_line_plot(sales):
     for sale in sales:
         if sale.i_type not in item_data:
             item_data[sale.i_type] = {'dates': [], 'total_quantity': []}
-        if sale._date not in item_data[sale.i_type]['dates']:
-            item_data[sale.i_type]['dates'].append(sale._date)
+        if sale.sale_date not in item_data[sale.i_type]['dates']:
+            item_data[sale.i_type]['dates'].append(sale.sale_date)
             item_data[sale.i_type]['total_quantity'].append(sale.items_sold)
         else:
-            index = item_data[sale.i_type]['dates'].index(sale._date)
+            index = item_data[sale.i_type]['dates'].index(sale.sale_date)
             item_data[sale.i_type]['total_quantity'][index] += sale.items_sold
     
     # Plot each item's data
