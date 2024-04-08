@@ -15,4 +15,5 @@ urlpatterns = [
     path('sale', views.sale, name='sale'),
     path('sale_list', views.sale_list, name='sale_list'),
     path('reorder', views.reorder, name='reorder'),
+    path('refill', views.refill, name='refill'),
 ]

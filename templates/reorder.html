@@ -80,7 +80,7 @@
         </tbody>
     </table>
     <br>
-    <form method = "post">
+    <form action="{% url 'refill' %}" method="POST" >
     {% csrf_token %}
     <div class="btn-container">
     <button type="submit" class="btn btn-primary" style="width: 10%;">Report Sale</button>

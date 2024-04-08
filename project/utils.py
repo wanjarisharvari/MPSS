@@ -67,7 +67,7 @@ def generate_line_plot(sales):
             item_data[sale.i_type]['total_quantity'].append(sale.items_sold)
         else:
             index = item_data[sale.i_type]['dates'].index(sale.sale_date)
-            item_data[sale.i_type]['total_quantity'][index] += sale.items_sold
+            item_data[sale.i_type]['total_quantity'][index] += (sale.items_sold * sale.cost)
     
     # Plot each item's data
     for item, data in item_data.items():
@@ -75,7 +75,7 @@ def generate_line_plot(sales):
     
     plt.title('Sales over Time by Item')
     plt.xlabel('Date')
-    plt.ylabel('Quantity')
+    plt.ylabel('Sale')
     plt.grid(True)
     plt.legend()
 

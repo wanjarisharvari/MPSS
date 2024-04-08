@@ -87,11 +87,12 @@ def list(request):
                     items = Item.objects.filter(id=id)
                     return render(request, 'edit.html', {'items':items})'''
             
-        if 'function2' in request.POST:
+        '''if 'function2' in request.POST:
                 item = Item.objects.filter(id=id)
                 item.delete()
                 return redirect('/view_delete')
-            #return render(request, 'your_template.html')
+            #return render(request, 'your_template.html')'''
+        #calculate_items_sold_last_7_days()
         items = Item.objects.all()
         return render(request, 'list.html', {'items':items})
     
@@ -133,7 +134,7 @@ def sale(request):
             sale_date = date.today()
             sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , sale_date = sale_date)
             sale.save()
-
+            calculate_items_sold_last_7_days()
             return redirect('sale')
         else:
             msg = "Insufficient inventory!"
@@ -149,14 +150,12 @@ def sale_list(request):
 def reorder(request):
     items = Item.objects.all()
     insufficients = []
-    calculate_items_sold_last_7_days()
+#calculate_items_sold_last_7_days()
    # if request.method == 'POST':
     #flag = 0  
     
-
     for item in items:
         if(item.quantity<item.threshold):
-            flag=1
             insufficients.append(item) 
 
     #if request.method == 'POST' and flag ==1 :
@@ -192,3 +191,12 @@ def plot_sales(request):
 
     #return render(request, 'all_plots.html', context)
     return render(request, 'home.html', context )
+
+def refill(request):
+    items = Item.objects.all()
+    for item in items:
+        if(item.quantity<item.threshold):
+            item.quantity = item.threshold + 200
+            item.save()
+    return redirect('/reorder')
+
