@@ -64,10 +64,11 @@ def generate_line_plot(sales):
             item_data[sale.i_type] = {'dates': [], 'total_quantity': []}
         if sale.sale_date not in item_data[sale.i_type]['dates']:
             item_data[sale.i_type]['dates'].append(sale.sale_date)
-            item_data[sale.i_type]['total_quantity'].append(sale.items_sold)
+            item_data[sale.i_type]['total_quantity'].append(sale.cost)
         else:
             index = item_data[sale.i_type]['dates'].index(sale.sale_date)
-            item_data[sale.i_type]['total_quantity'][index] += (sale.items_sold * sale.cost)
+            #total_cost = sale.cost * sale.quantity
+            item_data[sale.i_type]['total_quantity'][index] += (sale.totalcost)
     
     # Plot each item's data
     for item, data in item_data.items():

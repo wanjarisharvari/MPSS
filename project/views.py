@@ -130,9 +130,9 @@ def sale(request):
             item.quantity = item.quantity - quantity
             q = item.quantity
             item.save()
-            cost = quantity*item.price
+            cost = item.price
             sale_date = date.today()
-            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , sale_date = sale_date)
+            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , totalcost = quantity * cost , sale_date = sale_date)
             sale.save()
             calculate_items_sold_last_7_days()
             return redirect('sale')
@@ -196,7 +196,7 @@ def refill(request):
     items = Item.objects.all()
     for item in items:
         if(item.quantity<item.threshold):
-            item.quantity = item.threshold + 200
+            item.quantity = 150
             item.save()
     return redirect('/reorder')
 
