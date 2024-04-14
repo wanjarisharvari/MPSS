@@ -16,9 +16,10 @@ class Item(models.Model):
     i_type = models.CharField(max_length=250, null=True, blank=True)
     manufacturer = models.CharField(max_length=250, null=True, blank=True)
     v_type = models.CharField(max_length=250, null=True, blank=True)
-    quantity = models.IntegerField(null=True, blank=True)
+    quantity = models.IntegerField(default = 0)
     price = models.IntegerField(null=True, blank=True)
     threshold = models.IntegerField(default = 10)
+    address = models.CharField(max_length=250, null=True, blank=True)
 
     def __str__(self):
         return (self.i_type + '-' + self.manufacturer + '-' + self.v_type)

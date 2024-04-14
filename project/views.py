@@ -24,7 +24,8 @@ def add(request):
             manufacturer = request.POST['manufacturer']
             quantity = request.POST['quantity']
             price = request.POST['price']
-            item = Item(i_type=itype, v_type=vtype, manufacturer=manufacturer, quantity=quantity, price=price)
+            address = request.POST['address']
+            item = Item(i_type=itype, v_type=vtype, manufacturer=manufacturer, quantity=quantity, price=price, address = address)
             item.save()
             return redirect('/add')
         else:
@@ -113,6 +114,7 @@ def edit(request, id):
         item.manufacturer = request.POST.get('manufacturer')
         item.quantity = request.POST.get('quantity')
         item.price = request.POST.get('price')
+        item.address = request.POST.get('address')
         item.save()
         return redirect('/list')
     else:
@@ -135,13 +137,15 @@ def sale(request):
             sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , totalcost = quantity * cost , sale_date = sale_date)
             sale.save()
             calculate_items_sold_last_7_days()
-            return redirect('sale')
+            msg = "Bill Made Successfully!"
+            return render(request, 'sale.html', {'msg':msg, 'items':items})
         else:
             msg = "Insufficient inventory!"
             return render(request, 'sale.html', {'msg':msg, 'items':items})
     else:
         items = Item.objects.all()
-        return render(request, 'sale.html', {'items':items})
+        msg=""
+        return render(request, 'sale.html', {'msg':msg, 'items':items})
     
 def sale_list(request):
     sales = Sale.objects.all()

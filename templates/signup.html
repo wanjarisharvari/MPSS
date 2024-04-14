@@ -71,41 +71,11 @@
             text-decoration: none;
         }
 
-        /* CSS for navigation bar */
+        /* CSS for navigation bar 
         body {
             background-image: url("https://www.shutterstock.com/shutterstock/photos/785007553/display_1500/stock-vector-seamless-white-background-with-gray-linear-icons-of-car-parts-and-elements-785007553.jpg");
             background-size: cover;
             background-repeat: no-repeat;
-        }
-
-        /*.navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            color: white;
-            padding: 10px;
-        }
-
-        .navbar .home {
-            margin: 0;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .navbar a:hover {
-            background-color: white;
-            color: #333;
-        }
-
-        .navbar .home:hover {
-            background-color: #333;
-            color: wheat;
         }*/
     </style>
     <link rel="stylesheet" href="{% static 'signup_style.css' %}">
@@ -126,23 +96,23 @@
         <div class="container">
             <form method="POST" action="{% url 'signup' %}">
                 {% csrf_token %}
-                <h2>Sign Up Form</h2>
+                <h1>Sign Up</h>
                 <!-- {{form}} -->
                 <div class="input-box">
                     <label for="username">Username</label>
-                    <input type="text" name="username" id="username">
+                    <input type="text" name="username" id="username" required>
                 </div>
                 <div class="input-box">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email">
+                    <input type="email" name="email" id="email" required>
                 </div>
                 <div class="input-box">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" required>
                 </div>
                 <div class="input-box">
                     <label for="cnf_password">Confirm Password</label>
-                    <input type="password" name="cnf_password" id="cnf_password">
+                    <input type="password" name="cnf_password" id="cnf_password" required>
                 </div>
                 <input type="submit" class="btn">
                 <span>{{msg}}</span>

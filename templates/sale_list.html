@@ -10,35 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            color: white;
-            padding: 10px;
-        }
-
-        .navbar .home {
-            margin: 0;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .navbar a:hover {
-            background-color: white;
-            color: #333;
-        }
-
-        .navbar .home:hover {
-            background-color: #333;
-            color: wheat;
-        }
+        
     </style>
 </head>
 
@@ -50,17 +22,17 @@
             <a href="{% url 'home' %}">Home</a>
         </div>
     </div>-->
-    <h1 style="text-align: center;">Sales</h1>
+    <h1 style="text-align: center;">Items Sold</h1>
     <table class="table table-striped"
         style="margin-top:20px !important; width:70%; margin:auto; border:2px solid black; border-radius:20px !important">
         <thead style="border-radius: 20px;">
             <tr>
                 <th scope="col">Item Type</th>
-                <th scope="col">Manufacturer name</th>
                 <th scope="col">Vehicle Type</th>
+                <th scope="col">Manufacturer name</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Cost</th>
-                <th scope="col">date</th>
+                <th scope="col">Date</th>
                 <!-- <th scope="col">Action</th> -->
             </tr>
         </thead>
@@ -68,8 +40,8 @@
             {% for sale in sales %}
                 <tr>
                     <th scope="row">{{sale.i_type}}</th>
-                    <td>{{sale.manufacturer}}</td>
                     <td>{{sale.v_type}}</td>
+                    <td>{{sale.manufacturer}}</td>
                     <td>{{sale.items_sold}}</td>
                     <td>{{sale.totalcost}}</td>
                     <td>{{sale.sale_date}}</td>

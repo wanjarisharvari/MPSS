@@ -52,7 +52,7 @@ from matplotlib import pyplot as plt
 from io import BytesIO
 import base64
 
-def generate_line_plot(sales):
+'''def generate_line_plot(sales):
     plt.figure(figsize=(10, 6))
     
     # Create a dictionary to store data for each item
@@ -87,9 +87,53 @@ def generate_line_plot(sales):
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     plt.close()
 
+    return image_base64'''
+
+from datetime import datetime, timedelta
+
+def generate_line_plot(sales):
+    plt.figure(figsize=(10, 6))
+    
+    # Create a dictionary to store data for each item
+    item_data = {}
+    
+    # Filter sales data for the past month
+    today = datetime.today().date()
+    past_month = today - timedelta(days=30)
+    filtered_sales = [sale for sale in sales if sale.sale_date >= past_month]
+    
+    # Process data for each item type
+    for sale in filtered_sales:
+        if sale.i_type not in item_data:
+            item_data[sale.i_type] = {'dates': [], 'total_quantity': []}
+        if sale.sale_date not in item_data[sale.i_type]['dates']:
+            item_data[sale.i_type]['dates'].append(sale.sale_date)
+            item_data[sale.i_type]['total_quantity'].append(sale.totalcost)
+        else:
+            index = item_data[sale.i_type]['dates'].index(sale.sale_date)
+            item_data[sale.i_type]['total_quantity'][index] += sale.totalcost
+    
+    # Plot each item's data
+    for item, data in item_data.items():
+        plt.plot(data['dates'], data['total_quantity'], marker='o', linestyle='-', label=item)
+    
+    plt.title('Sales over Time by Item (Past Month)')
+    plt.xlabel('Date')
+    plt.ylabel('Sale')
+    plt.grid(True)
+    plt.legend()
+
+    # Save the plot as an image
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
     return image_base64
 
-def generate_bar_plot(sales):
+
+'''def generate_bar_plot(sales):
     # Group sales data by manufacturer and sum quantities sold for each manufacturer
     manufacturer_sales = {}
     for sale in sales:
@@ -116,7 +160,44 @@ def generate_bar_plot(sales):
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     plt.close()
 
+    return image_base64'''
+
+from datetime import datetime, timedelta
+
+def generate_bar_plot(sales):
+    # Filter sales data for the past 7 days
+    today = datetime.today().date()
+    past_week = today - timedelta(days=7)
+    filtered_sales = [sale for sale in sales if sale.sale_date >= past_week]
+
+    # Group sales data by manufacturer and sum quantities sold for each manufacturer
+    manufacturer_sales = {}
+    for sale in filtered_sales:
+        if sale.manufacturer in manufacturer_sales:
+            manufacturer_sales[sale.manufacturer] += sale.items_sold
+        else:
+            manufacturer_sales[sale.manufacturer] = sale.items_sold
+
+    # Extract x and y values for the plot
+    x_values = list(manufacturer_sales.keys())
+    y_values = list(manufacturer_sales.values())
+    plt.figure(figsize=(10, 6))
+    plt.bar(x_values, y_values)
+    plt.title('Sales by Manufacturer (Past 7 Days)')
+    plt.xlabel('Manufacturer')
+    plt.ylabel('Quantity')
+    plt.xticks(rotation=45, ha='right')
+    plt.grid(axis='y')
+
+    # Save the plot as an image
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
     return image_base64
+
 
 def generate_pie_chart(sales):
     # Process the data to get labels and sizes for the plot
