@@ -133,6 +133,7 @@
             <form action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
                 <h1>Login</h1>
+                <h4 style="color: red ;text-align:center">{{msg}}</h4>
                 <div class="input-box">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>

@@ -26,7 +26,9 @@
             <a href="{% url 'home' %}">Home</a>
         </div>
     </div>-->
-    <h1 style="text-align: center;">Add Item</h1>
+    <br>
+    <h3 style="text-align: center;">Add Item</h3>
+    <br>
     <form action="{% url 'add' %}" method="POST" style="width: 70%; margin:auto; margin-top:20px">
         {% csrf_token %}
         <div class="form-group">
@@ -57,14 +59,16 @@
 
         <div class="form-group">
             <label for="exampleInputEmail1">Address</label>
-            <input type="number" class="form-control" id="address" name="address" aria-describedby="emailHelp" placeholder="address" required>
+            <input type="text" class="form-control" id="address" name="address" aria-describedby="emailHelp" placeholder="address" required>
             <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
         </div>
 
         <div class="btn-container">
         <button type="submit" class="btn btn-primary" style="width: 10%;">Add Item</button>
-        <h2 style="color: green ;text-align:center">{{msg}}</h2>
+        
         </div>
+
+        <h2 style="color: green ;text-align:center">{{msg}}</h2>
         <!-- <button onclick="{% url 'list' %}" class="btn btn-primary">View all</button> -->
     </form>
 </body>

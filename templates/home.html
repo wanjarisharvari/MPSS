@@ -6,22 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Plot</title>
 </head>
+<style>
+    .sales-container {
+        text-align: center;
+        margin: 0 auto; /* This will horizontally center the div */
+        width: 60%; /* Adjust this width as needed */
+    }
+</style>    
 <body action="{% url 'home' %}" >
     <h1 style="text-align: center;">Analysis</h1>
 
     <!-- Line Plot -->
     <div>
-        <h2>Line Plot</h2>
+        <h4>Line Plot</h4>
         <img src="data:image/png;base64,{{ line_plot }}" alt="Line Plot">
     </div>
 
     <!-- Bar Plot -->
     <div>
-        <h2>Bar Plot</h2>
+        <h4>Bar Plot</h4>
         <img src="data:image/png;base64,{{ bar_plot }}" alt="Bar Plot">
     </div>
-
-    <!-- Pie Chart 
+    <div class="sales-container">
+        <br>
+    <h3>Total Sales</h3>
+    <h4>Past Month:</h4>
+    <p>Total Revenue: {{ revenue_past_month }}</p>
+    <p>Total Items Sold: {{ items_sold_past_month }}</p>
+    <h4>Past Week:</h4>
+    <p>Total Revenue: {{ revenue_past_week }}</p>
+    <p>Total Items Sold: {{ items_sold_past_week }}</p>
+    </div>
+     <!--Pie Chart 
     <div>
         <h2>Pie Chart</h2>
         <img src="data:image/png;base64,{{ pie_chart }}" alt="Pie Chart">

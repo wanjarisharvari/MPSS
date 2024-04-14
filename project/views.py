@@ -27,13 +27,16 @@ def add(request):
             address = request.POST['address']
             item = Item(i_type=itype, v_type=vtype, manufacturer=manufacturer, quantity=quantity, price=price, address = address)
             item.save()
-            return redirect('/add')
+            msg = "Item Added Successfully"
+            return render(request, 'add.html', {'msg':msg})
         else:
-            return render(request, 'add.html')
+            msg = ""
+            return render(request, 'add.html', {'msg':msg})
     else:
         return redirect('/login')
 
 def view_login(request):
+    msg=""
     if(request.method=="POST"):
         username = request.POST['username']
         password = request.POST['password']
@@ -41,7 +44,9 @@ def view_login(request):
         if user is not None:
             login(request, user)
             return redirect('/')
-    return render(request, 'login.html')
+        else:
+            msg="Invald ID or Password"
+    return render(request, 'login.html',{'msg':msg})
 
 def signup(request):
     if(request.method=='POST'):
@@ -175,7 +180,7 @@ def reorder(request):
 
 #from django.shortcuts import render
 #from .models import Sale
-from .utils import generate_line_plot, generate_bar_plot, generate_pie_chart
+from .utils import generate_line_plot, generate_bar_plot, generate_pie_chart , calculate_totals
 
 def plot_sales(request):
     # Query data from the Sale model
@@ -185,16 +190,25 @@ def plot_sales(request):
     line_plot = generate_line_plot(sales)
     bar_plot = generate_bar_plot(sales)
     pie_chart = generate_pie_chart(sales)
+    sales = Sale.objects.all()
+
+    # Calculate totals
+    totals = calculate_totals(sales)
 
     # Pass plot images to the template
     context = {
         'line_plot': line_plot,
         'bar_plot': bar_plot,
+        'revenue_past_month': totals['revenue_past_month'],
+        'items_sold_past_month': totals['items_sold_past_month'],
+        'revenue_past_week': totals['revenue_past_week'],
+        'items_sold_past_week': totals['items_sold_past_week'],
         #'pie_chart': pie_chart,
     }
 
+
     #return render(request, 'all_plots.html', context)
-    return render(request, 'home.html', context )
+    return render(request, 'home.html', context)
 
 def refill(request):
     items = Item.objects.all()

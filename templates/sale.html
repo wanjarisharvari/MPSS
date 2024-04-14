@@ -27,7 +27,9 @@
             <a href="{% url 'home' %}">Home</a>
         </div>
     </div>-->
-    <h1 style="text-align: center;">Add Sale</h1>
+    <br>
+    <h3 style="text-align: center;">Add Sale</h3>
+    <br>
     <form action="{% url 'sale' %}" method="POST" style="width: 70%; margin:auto; margin-top:20px">
         {% csrf_token %}
         <label for="exampleInputEmail1">Item</label>

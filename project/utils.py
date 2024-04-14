@@ -164,7 +164,7 @@ def generate_line_plot(sales):
 
 from datetime import datetime, timedelta
 
-def generate_bar_plot(sales):
+'''def generate_bar_plot(sales):
     # Filter sales data for the past 7 days
     today = datetime.today().date()
     past_week = today - timedelta(days=7)
@@ -196,7 +196,54 @@ def generate_bar_plot(sales):
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     plt.close()
 
+    return image_base64'''
+
+
+from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+
+def generate_bar_plot(sales):
+    # Filter sales data for the past 7 days
+    today = datetime.today().date()
+    past_week = today - timedelta(days=7)
+    filtered_sales = [sale for sale in sales if sale.sale_date >= past_week]
+
+    # Group sales data by manufacturer and sum quantities sold for each manufacturer
+    manufacturer_sales = {}
+    for sale in filtered_sales:
+        if sale.v_type in manufacturer_sales:
+            manufacturer_sales[sale.v_type] += sale.items_sold
+        else:
+            manufacturer_sales[sale.v_type] = sale.items_sold
+
+    # Extract x and y values for the plot
+    x_values = list(manufacturer_sales.keys())
+    y_values = list(manufacturer_sales.values())
+    
+    plt.figure(figsize=(10, 6))
+    # Add numbers at the end of each bar
+    plt.barh(x_values, y_values, height=0.3, color='hotpink' )  # Adjust the height to keep the bars thin
+
+    # Add numbers at the end of each bar
+    for i, value in enumerate(y_values):
+        plt.text(value, i, str(value), ha='left', va='center')  # Add annotation at the end of the bar
+
+    plt.title('Sales by Manufacturer (Past 7 Days)')
+    plt.ylabel('Vehicle')
+    plt.xlabel('Quantity')
+    plt.grid(axis='x')
+
+    # Save the plot as an image
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
     return image_base64
+
 
 
 def generate_pie_chart(sales):
@@ -217,4 +264,28 @@ def generate_pie_chart(sales):
     plt.close()
 
     return image_base64
+
+
+from datetime import datetime, timedelta
+
+def calculate_totals(sales):
+    # Calculate totals for the past month
+    today = datetime.today().date()
+    past_month = today - timedelta(days=30)
+    sales_past_month = [sale for sale in sales if sale.sale_date >= past_month]
+    revenue_past_month = sum(sale.totalcost for sale in sales_past_month)
+    items_sold_past_month = sum(sale.items_sold for sale in sales_past_month)
+
+    # Calculate totals for the past week
+    past_week = today - timedelta(days=7)
+    sales_past_week = [sale for sale in sales if sale.sale_date >= past_week]
+    revenue_past_week = sum(sale.totalcost for sale in sales_past_week)
+    items_sold_past_week = sum(sale.items_sold for sale in sales_past_week)
+
+    return {
+        "revenue_past_month": revenue_past_month,
+        "items_sold_past_month": items_sold_past_month,
+        "revenue_past_week": revenue_past_week,
+        "items_sold_past_week": items_sold_past_week
+    }
 
