@@ -25,6 +25,13 @@ class Item(models.Model):
     price = models.IntegerField(null=True, blank=True)
     threshold = models.IntegerField(default = 10)
     address = models.CharField(max_length=250, null=True, blank=True)
+    ID = models.CharField(max_length=250, null=True, blank=True)
+
+    '''def save(self, *args, **kwargs):
+        # Concatenate i_type and v_type to generate ID
+        
+        self.ID = f"{self.i_type}_{self.v_type}"
+        super().save(*args, **kwargs)'''
 
     def __str__(self):
         return (self.i_type + '-' + self.manufacturer + '-' + self.v_type)
@@ -38,7 +45,7 @@ class Sale(models.Model):
     cost = models.IntegerField(null=True, blank=True)
     totalcost = models.IntegerField(null=True, blank=True)
     sale_date = models.DateField(default=datetime.date.today)
-    
+    ID = models.CharField(max_length=250, null=True, blank=True)
 
 
     def __str__(self):

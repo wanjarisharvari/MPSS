@@ -25,6 +25,7 @@ def add(request):
             quantity = request.POST['quantity']
             price = request.POST['price']
             address = request.POST['address']
+            item_id = f"{itype}_{vtype}"
             item = Item(i_type=itype, v_type=vtype, manufacturer=manufacturer, quantity=quantity, price=price, address = address)
             item.save()
             msg = "Item Added Successfully"
@@ -128,9 +129,12 @@ def edit(request, id):
     
 def sale(request):
     if(request.method=="POST"):
-        itype = request.POST['itype']
+        item_combined = request.POST['item_itype']
+        #itype, vtype = item_combined.split('-')
         quantity = int(request.POST['quantity'])
-        item = Item.objects.filter(i_type=itype)[0]
+        #item = Item.objects.filter(i_type=itype)[0]
+        #item = Item.objects.filter(i_type=itype, v_type=vtype).first()
+        item = Item.objects.filter(i_type=item_combined).first()
         items = Item.objects.all()
         if(quantity<=int(item.quantity)):
             #item.items_sold = quantity 
@@ -139,7 +143,7 @@ def sale(request):
             item.save()
             cost = item.price
             sale_date = date.today()
-            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , totalcost = quantity * cost , sale_date = sale_date)
+            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , totalcost = quantity * cost , sale_date = sale_date, ID=item.ID)
             sale.save()
             calculate_items_sold_last_7_days()
             msg = "Bill Made Successfully!"

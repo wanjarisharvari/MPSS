@@ -33,10 +33,10 @@
     <form action="{% url 'sale' %}" method="POST" style="width: 70%; margin:auto; margin-top:20px">
         {% csrf_token %}
         <label for="exampleInputEmail1">Item</label>
-        <select class="form-select" aria-label="Default select example" name="itype" id="itype" required>
+        <select class="form-select" aria-label="Default select example" name="item_itype" id="item_itype" required>
             <option selected value="0">Open this select menu</option>
             {% for item in items %}
-                <option value="{{item.i_type}}">{{item.i_type}}</option>
+                <option value="{{item.i_type}}">{{item.i_type}} ({{item.v_type}})</option>
             {% endfor %}
           </select>
         <!-- <div class="form-group">
@@ -66,6 +66,15 @@
         </div>
         <!-- <button onclick="{% url 'list' %}" class="btn btn-primary">View all</button> -->
     </form>
+
+    <!--<script>
+        // JavaScript to set the value of vtype when an option is selected
+        document.getElementById('itype').addEventListener('change', function() {
+            var selectedValue = this.value.split('-')[1];
+            document.getElementById('vtype').value = selectedValue;
+        });
+        </script>-->
+
 </body>
 
 </html>
