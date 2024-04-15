@@ -5,6 +5,9 @@ from .urls import *
 from datetime import datetime , timedelta 
 from django.db.models import Sum
 
+
+
+
 item_sales = {}
 
 def calculate_items_sold_last_7_days():
@@ -88,11 +91,13 @@ import base64
     plt.close()
 
     return image_base64'''
-
+import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+from io import BytesIO
+import base64
 
 def generate_line_plot(sales):
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(15, 6))
     
     # Create a dictionary to store data for each item
     item_data = {}
@@ -104,14 +109,16 @@ def generate_line_plot(sales):
     
     # Process data for each item type
     for sale in filtered_sales:
-        if sale.i_type not in item_data:
-            item_data[sale.i_type] = {'dates': [], 'total_quantity': []}
-        if sale.sale_date not in item_data[sale.i_type]['dates']:
-            item_data[sale.i_type]['dates'].append(sale.sale_date)
-            item_data[sale.i_type]['total_quantity'].append(sale.totalcost)
+        # Concatenate v_type and i_type
+        item = f"{sale.v_type} {sale.i_type}"
+        if item not in item_data:
+            item_data[item] = {'dates': [], 'total_quantity': []}
+        if sale.sale_date not in item_data[item]['dates']:
+            item_data[item]['dates'].append(sale.sale_date)
+            item_data[item]['total_quantity'].append(sale.totalcost)
         else:
-            index = item_data[sale.i_type]['dates'].index(sale.sale_date)
-            item_data[sale.i_type]['total_quantity'][index] += sale.totalcost
+            index = item_data[item]['dates'].index(sale.sale_date)
+            item_data[item]['total_quantity'][index] += sale.totalcost
     
     # Plot each item's data
     for item, data in item_data.items():
@@ -131,6 +138,7 @@ def generate_line_plot(sales):
     plt.close()
 
     return image_base64
+
 
 
 '''def generate_bar_plot(sales):
@@ -204,7 +212,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 
-def generate_bar_plot(sales):
+'''def generate_bar_plot(sales):
     # Filter sales data for the past 7 days
     today = datetime.today().date()
     past_week = today - timedelta(days=7)
@@ -242,7 +250,54 @@ def generate_bar_plot(sales):
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     plt.close()
 
+    return image_base64'''
+
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+from io import BytesIO
+import base64
+
+def generate_bar_plot(sales):
+    # Filter sales data for the past 7 days
+    today = datetime.today().date()
+    past_week = today - timedelta(days=7)
+    filtered_sales = [sale for sale in sales if sale.sale_date >= past_week]
+
+    # Group sales data by manufacturer and sum quantities sold for each manufacturer
+    manufacturer_sales = {}
+    for sale in filtered_sales:
+        manufacturer = f"{sale.v_type} {sale.i_type}"  # Concatenate v_type and i_type
+        if manufacturer in manufacturer_sales:
+            manufacturer_sales[manufacturer] += sale.items_sold
+        else:
+            manufacturer_sales[manufacturer] = sale.items_sold
+
+    # Extract x and y values for the plot
+    x_values = list(manufacturer_sales.values())  # Values become the x-axis
+    y_values = list(manufacturer_sales.keys())    # Keys (manufacturer names) become the y-axis
+
+    plt.figure(figsize=(15, 6))
+    # Add numbers at the end of each bar
+    plt.barh(y_values, x_values, height=0.3, color='hotpink')  # Adjust the height to keep the bars thin
+
+    # Add numbers at the end of each bar
+    for i, value in enumerate(x_values):
+        plt.text(value, i, str(value), ha='left', va='center')  # Add annotation at the end of the bar
+
+    plt.title('Sales by Manufacturer (Past 7 Days)')
+    plt.xlabel('Quantity')
+    plt.ylabel('Manufacturer')
+    plt.grid(axis='x')
+
+    # Save the plot as an image
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
     return image_base64
+
 
 
 

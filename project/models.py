@@ -1,6 +1,11 @@
 from django.db import models
 import datetime
 
+import string
+import random
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 # Create your models here.
 
 class Signup(models.Model):
@@ -33,6 +38,8 @@ class Sale(models.Model):
     cost = models.IntegerField(null=True, blank=True)
     totalcost = models.IntegerField(null=True, blank=True)
     sale_date = models.DateField(default=datetime.date.today)
+    
+
 
     def __str__(self):
         return (self.i_type + '-' + self.manufacturer + '-' + self.v_type + '-' + str(self.quantity))
