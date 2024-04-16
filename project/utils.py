@@ -10,7 +10,7 @@ from django.db.models import Sum
 
 item_sales = {}
 
-def calculate_items_sold_last_7_days():
+'''def calculate_items_sold_last_7_days():
     # Calculate the date 7 days ago
     seven_days_ago = datetime.now() - timedelta(days=7)
 
@@ -23,23 +23,66 @@ def calculate_items_sold_last_7_days():
     # Calculate the total items sold for each item type
     for sale in sales_last_week:
         item_type = sale.i_type
+        vehicle_type = sale.v_type
         items_sold = sale.items_sold
-        if item_type in item_sales:
-            item_sales[item_type] += items_sold
+
+        item_key = (item_type, vehicle_type)
+
+        if item_key in item_sales:
+            item_sales[item_key] += items_sold
         else:
-            item_sales[item_type] = items_sold
+            item_sales[item_key] = items_sold
 
     # Print the total items sold for each item type in the last week
     
     for key,value in item_sales.items() :
+        item_type, vehicle_type = key
         _items = Item.objects.all()
         for item in _items:
-            if(item.i_type == key):
+            if(item.i_type == item_type and item.v_type == vehicle_type):
                 item.threshold = value 
                 item.save()
 
     for item_type, total_items_sold in item_sales.items():
+        print(f"Item Type: {item_type}, Total Items Sold: {total_items_sold}")'''
+from django.db import transaction
+def calculate_items_sold_last_7_days():
+    # Calculate the date 7 days ago
+    seven_days_ago = datetime.now() - timedelta(days=7)
+
+    # Query the sales data for the last 7 days
+    sales_last_week = Sale.objects.filter(sale_date__gte=seven_days_ago)
+
+    # Initialize a dictionary to store total items sold for each item type
+    item_sales = {}
+
+    # Calculate the total items sold for each item type
+    for sale in sales_last_week:
+        item_type = sale.i_type
+        vehicle_type = sale.v_type
+        items_sold = sale.items_sold
+
+        item_key = (item_type, vehicle_type)
+
+        if item_key in item_sales:
+            item_sales[item_key] += items_sold
+        else:
+            item_sales[item_key] = items_sold
+
+    with transaction.atomic():
+    # Update the threshold for items with matching i_type and v_type
+       for (item_type, vehicle_type), total_items_sold in item_sales.items():
+            #if item_type == vehicle_type:  # Check if i_type is equal to v_type
+                _items = Item.objects.filter(i_type=item_type, v_type=vehicle_type)
+                for item in _items:
+                    item.threshold = total_items_sold
+                    item.save()
+
+    # Print the total items sold for each item type in the last week
+    for item_type, total_items_sold in item_sales.items():
         print(f"Item Type: {item_type}, Total Items Sold: {total_items_sold}")
+
+
 
 
     '''for item_type, total_items_sold in item_sales.items():

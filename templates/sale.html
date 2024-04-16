@@ -36,7 +36,7 @@
         <select class="form-select" aria-label="Default select example" name="item_itype" id="item_itype" required>
             <option selected value="0">Open this select menu</option>
             {% for item in items %}
-                <option value="{{item.i_type}}">{{item.i_type}} ({{item.v_type}})</option>
+                <option value="{{ item.i_type }}-{{ item.v_type }}">{{item.v_type}} {{item.i_type}}</option>
             {% endfor %}
           </select>
         <!-- <div class="form-group">

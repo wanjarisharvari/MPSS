@@ -130,11 +130,12 @@ def edit(request, id):
 def sale(request):
     if(request.method=="POST"):
         item_combined = request.POST['item_itype']
+        itype, vtype = item_combined.split('-')
         #itype, vtype = item_combined.split('-')
         quantity = int(request.POST['quantity'])
         #item = Item.objects.filter(i_type=itype)[0]
         #item = Item.objects.filter(i_type=itype, v_type=vtype).first()
-        item = Item.objects.filter(i_type=item_combined).first()
+        item = Item.objects.filter(i_type=itype, v_type=vtype)[0]
         items = Item.objects.all()
         if(quantity<=int(item.quantity)):
             #item.items_sold = quantity 
@@ -143,7 +144,7 @@ def sale(request):
             item.save()
             cost = item.price
             sale_date = date.today()
-            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , totalcost = quantity * cost , sale_date = sale_date, ID=item.ID)
+            sale = Sale(i_type = item.i_type, manufacturer = item.manufacturer, v_type = item.v_type, quantity = q ,items_sold = quantity , cost=cost , totalcost = quantity * cost , sale_date = sale_date)
             sale.save()
             calculate_items_sold_last_7_days()
             msg = "Bill Made Successfully!"
@@ -218,7 +219,16 @@ def refill(request):
     items = Item.objects.all()
     for item in items:
         if(item.quantity<item.threshold):
-            item.quantity = 150
-            item.save()
+            if(item.threshold<=50):
+                item.quantity = 50
+                item.save()
+            if(item.threshold>50 and item.threshold<=100):
+                item.quantity = 100
+                item.save()  
+            else:
+                item.quantity = 150
+                item.save() 
+            #item.quantity = 150
+            #item.save()
     return redirect('/reorder')
 
