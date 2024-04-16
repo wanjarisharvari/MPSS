@@ -153,7 +153,7 @@ def generate_line_plot(sales):
     # Process data for each item type
     for sale in filtered_sales:
         # Concatenate v_type and i_type
-        item = f"{sale.v_type} {sale.i_type}"
+        item = f"{sale.v_type} / {sale.i_type}"
         if item not in item_data:
             item_data[item] = {'dates': [], 'total_quantity': []}
         if sale.sale_date not in item_data[item]['dates']:
@@ -309,7 +309,7 @@ def generate_bar_plot(sales):
     # Group sales data by manufacturer and sum quantities sold for each manufacturer
     manufacturer_sales = {}
     for sale in filtered_sales:
-        manufacturer = f"{sale.v_type} {sale.i_type}"  # Concatenate v_type and i_type
+        manufacturer = f"{sale.v_type} / {sale.i_type}"  # Concatenate v_type and i_type
         if manufacturer in manufacturer_sales:
             manufacturer_sales[manufacturer] += sale.items_sold
         else:
